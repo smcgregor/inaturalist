@@ -79,7 +79,7 @@ People
       <h2>People following <%=h @user.login %></h2>
       <% end %>
     <% else %>
-    <h1>The People of iNaturalist</h1>
+    <h1>The People of SDWaterWatch</h1>
     <% end %>
   </div>
   
@@ -118,7 +118,7 @@ People
                       lists_by_login_path(person.login) %>
           <% if person.life_list && person.life_list.taxa.count > 0 %>
             <span class="description">
-              <span class="count"><%= number_with_delimiter(person.life_list.taxa.count) %></span> known species total
+              <span class="count"><%= number_with_delimiter(person.life_list.taxa.count) %></span> types total
             </span>
           <% end %>
         </td>

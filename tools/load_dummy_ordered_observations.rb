@@ -24,10 +24,10 @@ END_TIME = Time.parse('2009-01-01')
 time = START_TIME
 time_step = (END_TIME - START_TIME)/(1000)
 
-lat = -90
-lon = -180
-while lat <= 90
-  while lon <=180
+lat = -80
+lon = -170
+while lat <= 80
+  while lon <=170
     taxon = Taxon.first(:offset => rand(Taxon.count))
     time += time_step
     obs = Observation.new(
@@ -49,5 +49,5 @@ while lat <= 90
     end
   end
   lat += 10
-  lon = -180
+  lon = -170
 end

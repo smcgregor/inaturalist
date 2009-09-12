@@ -353,16 +353,16 @@
     <div id="carousellabel">
       <div class="right controls">
         <% if logged_in? -%>
-          <%= link_to_function "Add Species", "$('#batchadder').jqmShow()" %> |
+          <%= link_to_function "Add Type", "$('#batchadder').jqmShow()" %> |
         <% end -%>
         <%= link_to "View Check List", @place.check_list, :class => 'readmore' %>
       </div>
-      <strong>What lives here?</strong>
+      <strong>What happens here?</strong>
     </div>
     <% if @listed_taxa.blank? -%>
       <div class="notice" style="margin-bottom: 0; text-align: center">
-        Do you know what lives in <%=h @place.name %>?
-        <%= link_to "Add them to the list!", @place.check_list, :class => 'readmore' %>
+        Do you know what happens in <%=h @place.name %>?
+        <%= link_to "Add it to the list!", @place.check_list, :class => 'readmore' %>
       </div>
     <% else %>
       <ul id="carousel" class="jcarousel-skin-inat">
@@ -406,9 +406,9 @@
         <div class="loading status">Loading description...</div>
       </div>
       <div id="nodescription" style="display: none">
-        <h3 class='description'>There isn't a Wikipedia article or 
+        <h3 class='description'>There isn't a SDWaterSheds article or 
         redirect titled '<i><%= @place.wikipedia_name %></i>'.  Perhaps you'd like to
-        <a href='http://en.wikipedia.org/wiki/<%= @place.wikipedia_name %>'>
+        <a href='http://www.sdwatersheds.org/wiki/index.php/<%= @place.wikipedia_name %>'>
         make one</a>?</h3>
       </div>
     </div>
@@ -468,7 +468,7 @@
 
 <div id="batchadder">
   <span class="close corner">&times;</span>
-  <h3>Add species that live in <%= @place.name %></h3>
+  <h3>Add practice that happens in <%= @place.name %></h3>
   
   <div class="clear">
     <%= render :partial => 'lists/add_to_list', :object => @place.check_list %>

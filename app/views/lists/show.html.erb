@@ -84,11 +84,11 @@
   <% if @listed_taxa.empty? %>
     <div id="empty" class="readable description">
       <% if logged_in? && current_user.id == @list.user_id %>
-        You haven't observed any species to list yet! Try 
+        You haven't observed anything to list yet! Try 
         <%= link_to "adding some observations", new_observation_path %>
-        or just adding species using the form on this page.
+        or just adding types using the form on this page.
       <% else %>
-        <%= @list.user.login %> hasn't observed any species to list yet!
+        <%= @list.user.login %> hasn't observed anything to list yet!
       <% end %>
     </div>
   <% end %>

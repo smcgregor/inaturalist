@@ -95,7 +95,7 @@
     });
 
     // Insert the status
-    var status = $('<div class="status">Species Unknown</div>');
+    var status = $('<div class="status">Type Unknown</div>');
     $(status).css(
       $.extend(
         $.fn.simpleTaxonSelector.styles.statuses['default'],
@@ -168,17 +168,6 @@
     // options
     if (taxa.length == 0) {
       var status = $('<span>No results for "' + q + '".<br/></span>');
-      if (options.includeSearchExternal) {
-        $(status).append(
-          $('<a href="#">Search external name providers &raquo;</a>').css({
-            'font-weight': 'bold'
-          }).click(function() {
-            $.fn.simpleTaxonSelector.lookup(
-              wrapper, $.extend(options, {includeExternal: true}));
-            return false;
-          })
-        )
-      };
       $.fn.simpleTaxonSelector.setStatus(wrapper, 'unmatched', status);
     }
   
@@ -207,21 +196,6 @@
         );
       });
       message.append(list);
-      if (options.includeSearchExternal) {
-        message.append(
-          $('<div></div>').append(
-            $('<a href="#">Search external name providers &raquo;</a>').css({
-              'font-weight': 'bold'
-            }).click(function() {
-              $.fn.simpleTaxonSelector.lookup(
-                wrapper, 
-                $.extend(options,{includeExternal: true, forceExternal: true})
-              );
-              return false;
-            })
-          )
-        );
-      };
   
       $.fn.simpleTaxonSelector.setStatus(wrapper, 'unmatched', message);
     }
@@ -395,18 +369,6 @@
   
   $.fn.simpleTaxonSelector.taxonToS = function(taxon) {
     var formatted = $('<span></span>').append(taxon.name);
-    if (taxon.rank == 'species' || 
-        taxon.rank == 'infraspecies' || 
-        taxon.rank == 'genus') {
-      $(formatted).wrapInner('<i></i>');
-    }
-    else {
-      if (typeof($.string) != 'undefined') {
-        $(formatted).prepend($.string(taxon.rank).capitalize().str + ' ');
-      } else {
-        $(formatted).prepend(taxon.rank + ' ');
-      }
-    }
     return $(formatted).get(0);
   };
   

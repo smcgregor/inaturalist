@@ -5,7 +5,7 @@
       <div class="header species_guess <%= "order_by #{@order}" if @order_by == 'species_guess' %>">
         <% url = params.merge(:order_by => 'species_guess') %>
         <% url[:order] = @order == 'desc' ? 'asc' : 'desc' if @order_by == 'species_guess' %>
-        <%= link_to 'Species / Taxon Name', url %>
+        <%= link_to 'Practice / Type', url %>
       </div>
       <div class="header user <%= "order_by #{@order}"  if @order_by == 'user' %>">
         <% url = params.merge(:order_by => 'user') %>

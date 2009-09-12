@@ -73,7 +73,7 @@ class LifeList < List
   
   private
   def set_defaults
-    self.title ||= "%s's Life List" % self.user.login
-    self.description ||= "Every species %s has ever seen." % self.user.login
+    self.title ||= "%s's List" % self.user.login
+    self.description ||= "Every type of practice %s has ever seen." % self.user.login
   end
 end

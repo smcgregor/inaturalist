@@ -572,7 +572,7 @@ Taxa &middot; <%= render :partial => "taxa/taxon.txt.erb",
     <h3>
       Description
       <span class="description">(from
-        <a href="http://en.wikipedia.org/wiki/<%= @taxon.name %>">Wikipedia</a>)
+        <a href="http://www.sdwatersheds.org/wiki/index.php/<%= @taxon.name %>">Wikipedia</a>)
       </span>
     </h3>
     <% unless @taxon.auto_description? %>
@@ -586,7 +586,7 @@ Taxa &middot; <%= render :partial => "taxa/taxon.txt.erb",
       <div id="nodescription" style="display: none">
         <h3 class='description'>There isn't a Wikipedia article or 
         redirect titled '<i><%= @taxon.name %></i>'.  Perhaps you'd like to
-        <a href='http://en.wikipedia.org/wiki/<%= @taxon.name %>'>
+        <a href='http://www.sdwatersheds.org/wiki/<%= @taxon.name %>'>
         make one</a>?</h3>
       </div>
     <% end %>

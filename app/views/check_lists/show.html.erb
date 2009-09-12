@@ -39,7 +39,7 @@
       <% if @list.editable_by?(current_user) && !@list.is_default? -%>
         <%= link_to "edit list", edit_check_list_path(@list) %> |
       <% end -%>
-      <%= link_to('Compare with your life list', compare_lists_path(@list), :class => 'inter readmore') %>
+      <%= link_to('Compare with your complete list', compare_lists_path(@list), :class => 'inter readmore') %>
     </div>
   <%- end -%>
   
@@ -102,7 +102,7 @@
   <% if @listed_taxa.empty? %>
     <div id="empty" class="readable description">
       This list is empty!
-      <% if logged_in? %>Try adding some species using the form on this page.<% end %>
+      <% if logged_in? %>Try adding some types using the form on this page.<% end %>
     </div>
   <% end %>
   
@@ -175,7 +175,7 @@
       </h3>
       <div id="other_check_lists">
         <p class="ui description">
-          Check lists for individual taxa that live here, e.g. "Birds of <%= h(@place.name) %>".
+          Check lists for individual types that live here, e.g. "Birds of <%= h(@place.name) %>".
         </p>
         <ul>
           <% for list in @other_check_lists %>

@@ -101,7 +101,7 @@ module TaxaHelper
     end
     path = 'iconic_taxa/'
     if iconic_taxon
-      path += iconic_taxon.name.downcase
+      path += iconic_taxon.css_name
     else
       path += 'unknown'
     end

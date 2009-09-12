@@ -182,7 +182,7 @@
                 :failure  => "afterTaxonAddedFailure(request);") do |f| %>
                 <%= f.hidden_field :list_id %>
                 <%= f.hidden_field :taxon_id %>
-                <%= f.submit("Add to #{list.id == current_user.life_list_id ? 'your life list!' : list.title}", 
+                <%= f.submit("Add to #{list.id == current_user.life_list_id ? 'your complete list!' : list.title}", 
                   :id => "listed_taxon_submit_#{lt.taxon_id}", :class => 'button') %>
                 <%= image_tag('spinner.gif', :id => "listed_taxon_loading_#{lt.taxon_id}", :style => 'display: none') %>
               <% end %>
@@ -197,7 +197,7 @@
     </div>    
   <% end %>
   <% if @pairs.empty? %>
-    Looks like neither have any taxa!
+    Looks like neither have any types!
   <% end %>
   
   <div class="column span-17">

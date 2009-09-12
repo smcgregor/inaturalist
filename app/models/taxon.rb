@@ -67,7 +67,7 @@ class Taxon < ActiveRecord::Base
   RANK_LEVELS = {
     'root'         => 100,
     'kingdom'      => 70,
-    'phylum '      => 60,
+    'phylum'      => 60,
     'subphylum'    => 57,
     'superclass'   => 53,
     'class'        => 50,
@@ -131,15 +131,11 @@ class Taxon < ActiveRecord::Base
   
   def to_plain_s
     comname = self.common_name
-    if self.rank == 'species' or self.rank == 'infraspecies'
-      sciname = self.name
-    else
-      sciname = '%s %s' % [self.rank.capitalize, self.name]
-    end
+    sciname = self.name
     if comname.nil?
       return sciname
     else
-      return '%s (%s)' % [comname.name, sciname]
+      return comname
     end
   end
   
@@ -414,6 +410,10 @@ class Taxon < ActiveRecord::Base
     tn.is_valid = true
     
     self.taxon_names << tn
+  end
+  
+  def css_name
+    self.name.downcase.gsub(" ","_")
   end
   
   def self.normalize_rank(rank)
