@@ -1,0 +1,57 @@
+# Example services and site config. Keys in all caps are globally scoped
+# You must replace these values with ones tailored to your own site.
+# For external services, follow the link in the note to go to the signup
+# page for the service.
+# 
+# The keys are all set to the length of a valid key, and the range of
+# acceptable characters. 
+Bad Practice:
+    Runoff Problem:
+        - Runoff to storm drains
+        - Dumping into storm drain
+        - Construction Runoff
+        - Improperly Labeled Storm Drain
+    Discharge:
+        Liquid Discharge:
+            - Industrial Sewage
+            - Sewer Overflow
+            - Pool Discharge
+            - RV Tank Emptied into Street
+            - Laundry Discharge
+            - Sediment Discharge
+            - Fluid Leaking from Automobile
+            - Antifreeze Spill
+            - Improper Disposal of Auto Waste
+        Solid Discharge:
+            - Litter
+            - Latex Paint Cleanup
+            - Overflowing Waste Bin
+            - Pet Waste
+    Water Quality Complaint:
+        - Oil Slick
+        - Dead or Effected Fish
+        - Algae Bloom
+        - Standing water
+    Negative Land Use:
+        - Improper Use of Fertilizers or Pesticides
+    Water Waste:
+        - Washing Pavement
+        - Washing Vehicles on Street
+        - Misaligned or Broken Sprinklers
+Good Practice:
+    Surface Runoff Reduction:
+        - Porous Pavement
+        - Eco Roof
+        - Vegetated Infiltration Swales
+        - Bioretention Planter Boxes
+    Positive Land Use:
+        - Yard Waste Composting
+        - Community Gardens
+        - Habitat Restoration Project
+    Water Efficiency or Conservation:
+        - Native Plant Landscape
+        - Ocean Friendly Garden
+        - Rain Water Harvesting
+    Energy Efficiency:
+        - Solar Panels
+        - LEED Certified buildings
