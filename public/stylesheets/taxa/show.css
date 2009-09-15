@@ -81,6 +81,17 @@ ul.taxonomic_tree li.reptilia         { list-style-image: url('/images/iconic_ta
 ul.taxonomic_tree li.aves             { list-style-image: url('/images/iconic_taxa/aves-15px.png'); }
 ul.taxonomic_tree li.mammalia         { list-style-image: url('/images/iconic_taxa/mammalia-15px.png'); }
 ul.taxonomic_tree li.unknown          { list-style-image: url('/images/iconic_taxa/unknown-15px.png'); }
+
+ul.taxonomic_tree li.discharge          { list-style-image: url('/images/iconic_taxa/discharge-15px.png'); }
+ul.taxonomic_tree li.runoff_problem          { list-style-image: url('/images/iconic_taxa/runoff_problem-15px.png'); }
+ul.taxonomic_tree li.surface_runoff_reduction          { list-style-image: url('/images/iconic_taxa/surface_runoff_reduction-15px.png'); }
+ul.taxonomic_tree li.positive_land_use          { list-style-image: url('/images/iconic_taxa/positive_land_use-15px.png'); }
+ul.taxonomic_tree li.negative_land_use          { list-style-image: url('/images/iconic_taxa/negative_land_use-15px.png'); }
+ul.taxonomic_tree li.energy_efficiency          { list-style-image: url('/images/iconic_taxa/energy_efficiency-15px.png'); }
+ul.taxonomic_tree li.water_efficiency_or_conservation          { list-style-image: url('/images/iconic_taxa/water_efficiency_or_conservation-15px.png'); }
+ul.taxonomic_tree li.water_waste          { list-style-image: url('/images/iconic_taxa/water_waste-15px.png'); }
+ul.taxonomic_tree li.water_quality_complaint          { list-style-image: url('/images/iconic_taxa/water_quality_complaint-15px.png'); }
+
 ul.taxonomic_tree .taxon .othernames {
   display: block;
 }
