@@ -10,3 +10,4 @@ tmp/
 db/sphinx/
 config/*.sphinx.conf
 *.DS_Store
+GeoLiteCity.dat

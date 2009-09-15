@@ -13,13 +13,13 @@ class UserMailer < ActionMailer::Base
   
   def admin_password_change(user)
     setup_email(user)
-    @subject << "Because of a recent upgrade, your iNaturalist.org password has been reset."
+    @subject << "Because of a recent upgrade, your SDWaterWatch.org password has been reset."
   end
   
   protected
     def setup_email(user)
       @recipients = "#{user.email}"
-      @from = "iNaturalist.org <#{APP_CONFIG[:admin_email]}>"
+      @from = "SDWaterWatch.org <#{APP_CONFIG[:admin_email]}>"
       @subject = "[#{APP_CONFIG[:site_name]}] "
       @sent_on = Time.now
       @body[:user] = user
