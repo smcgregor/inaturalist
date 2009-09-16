@@ -329,7 +329,7 @@ Taxa &middot; <%= render :partial => "taxa/taxon.txt.erb",
     </li>
     <%- else -%>
     <% for ancestor in @taxon.ancestors[1..-1] %>
-    <li class="<%= ancestor.iconic_taxon.name.downcase if ancestor.iconic_taxon %>">
+    <li class="<%= ancestor.iconic_taxon.css_name if ancestor.iconic_taxon %>">
       <a href="<%= taxon_path(ancestor) %>">
         <%= render :partial => 'shared/taxon', 
                    :locals => { 
@@ -338,12 +338,12 @@ Taxa &middot; <%= render :partial => "taxa/taxon.txt.erb",
     </li>
     <% end %>
     <%- end -%>
-    <li class="<%= @taxon.iconic_taxon.name.downcase if @taxon.iconic_taxon %>">
+    <li class="<%= @taxon.iconic_taxon.css_name if @taxon.iconic_taxon %>">
       <%= render :partial => 'shared/taxon', 
                  :locals => { :taxon => @taxon, :include_parens => false } %>
       <ul>
         <% for child in @taxon.children %>
-        <li class="<%= child.iconic_taxon.name.downcase if child.iconic_taxon %>">
+        <li class="<%= child.iconic_taxon.css_name if child.iconic_taxon %>">
           <a href="<%= taxon_path(child) %>">
             <%= render :partial => 'shared/taxon', 
                        :locals => {
