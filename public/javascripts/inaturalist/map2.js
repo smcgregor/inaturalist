@@ -231,7 +231,7 @@ GMap2.prototype.openInfoWindow = function() {
 GMap2.prototype.buildObservationInfoWindow = function(observation) {  
   // First see if we can find an observation component for this observation
   var existing = document.getElementById('observation-'+observation.id);
-  if (typeof existing != 'undefined' && typeof jQuery != 'undefined') {
+  if (typeof(existing) != 'undefined' && existing != null) {
     var infowinobs = $(existing).clone().get(0);
     $(infowinobs).find('.details').show();
     var wrapper = $(
@@ -239,48 +239,124 @@ GMap2.prototype.buildObservationInfoWindow = function(observation) {
     return $(wrapper).get(0);
   };
   
-  if (typeof(Prototype) == 'object') {
-    var wrapper = new Element('div');
-    var species_guess = new Element('h3').insert(
-      new Element('a', {href: '/observations/'+observation.id}).insert(observation.species_guess));
-    var user = new Element('p').insert(
-      new Element('a', {href: '/observations/'+observation.user.login}).insert(observation.user.login));
-    var description = new Element('p').insert(observation.description);
-    wrapper.insert(species_guess);
-    wrapper.insert(user);
-    wrapper.insert(description);
-  } else {
-    var wrapper = $('<div></div>').append(
-      $('<h3></h3>').append(
-        $('<a href="/observations/'+observation.id+'"></a>').append(
-          observation.species_guess
-        )
+  var wrapper = $('<div class="observation"></div>');
+  if (typeof(observation.image_url) != 'undefined' && observation.image_url != null) {
+    wrapper.append(
+      $('<img width="75" height="75"></img>').attr('src', observation.image_url).addClass('left')
+    );
+  } else if (typeof(observation.flickr_photos) != 'undefined' && observation.flickr_photos.length > 0) {
+    wrapper.append(
+      $('<img width="75" height="75"></img>').attr('src', observation.flickr_photos[0].square_url).addClass('left')
+    );
+  };
+  
+  wrapper.append(
+    $('<div class="readable attribute"></div>').append(
+      $('<a href="/observations/'+observation.id+'"></a>').append(
+        observation.species_guess
       ),
-      $('<p></p>').append(
-        $('<a href="/people/'+observation.user.login+'"></a>').append(
-          observation.user.login
-        )
-      ),
-      $('<p class="description"></p>').append(
-        observation.description
+      ', by ',
+      $('<a href="/people/'+observation.user.login+'"></a>').append(
+        observation.user.login
       )
-    ).get(0);
+    )
+  );
+  
+  if (typeof(observation.short_description) != 'undefined' && observation.short_description != null) {
+    wrapper.append($('<div class="description"></div>').append(observation.short_description));
+  } else {
+    wrapper.append($('<div class="description"></div>').append(observation.description));
   }
   
-  // handle photos
-  // not in yet...
-  // if (observation.flickr_photos.length > 0) {}
+  wrapper = $('<div class="observations mini infowindow"></div>').append(wrapper);
   
-  return wrapper;
+  return wrapper.get(0);
 };
+
+// All obs layer functions.  The mouseover effect was adapted from 
+// http://www.usnaviguide.com/ws-2008-02/demotilecookies.htm
+GMap2.prototype.showAllObsOverlay = function() {
+  if (typeof(this._allObsOverlay) == 'undefined') {
+    var myCopyright = new GCopyrightCollection();
+      var allObsLyr = new ObservationsTileLayer(myCopyright, 0, 18, {
+      isPNG: true,
+      tileUrlTemplate: this._observationsTileServer + '/{Z}/{X}/{Y}.png'
+    });
+    this._allObsOverlay = new GTileLayerOverlay(allObsLyr);
+    
+    // Create an invisible map marker to move over raster pts
+    var baseIcon = new GIcon(G_DEFAULT_ICON);
+    baseIcon.iconSize = new GSize(20,20);
+    baseIcon.iconAnchor = new GPoint(10,10);
+    baseIcon.shadow = null;
+    baseIcon.image = null;
+    this._allObsMarker = new GMarker(new GLatLng(35,-90), {icon:baseIcon});
+    this._allObsMarker.hide();
+    GEvent.addListener(this._allObsMarker, 'click', function() {
+      var observation = this._observation;
+      var maxContentDiv = $('<div class="observations mini maxinfowindow"></div>').append(
+        $('<div class="loading status">Loading...</div>')
+      ).get(0);
+      this.openInfoWindowHtml(
+        map.buildObservationInfoWindow(observation),
+        {maxContent: maxContentDiv, maxTitle: 'More about this observation'}
+      );
+      var infoWindow = map.getInfoWindow();
+      GEvent.addListener(infoWindow, "maximizeclick", function() {
+        GDownloadUrl("/observations/"+observation.id+"?partial=observation", function(data) {
+          maxContentDiv.innerHTML = data;
+          $(maxContentDiv).find('.details').show();
+          if (typeof($.jqm) != 'undefined') {
+            $('#modal_image_box').jqmAddTrigger('.maxinfowindow a.modal_image_link');
+          }
+        });
+      });
+    });
+    map.addOverlay(this._allObsMarker) ;
+  };
   
-// GMap2.prototype.bindHiddenFormElements = function(lat, lng, scale) {
-//     
-// }
-//   
-// GMap2.prototype.bindGeocodeTextField = function(element) {
-//     
-// }
+  map.addOverlay(this._allObsOverlay);
+  
+  // Listen to all mouse mvmnts over the map to see if they pass near obs
+  this._mouseMoveListenerHandle = GEvent.addListener(map, 'mousemove', 
+    this._mouseMoveListener);
+}
+
+GMap2.prototype.hideAllObsOverlay = function() {
+  if (typeof(this._allObsOverlay) != 'undefined') {
+    this.removeOverlay(this._allObsOverlay);
+    GEvent.removeListener(this._mouseMoveListenerHandle);
+  };
+}
+
+GMap2.prototype._mouseMoveListener = function(mouseLatLng) {
+  var zoom = this.getZoom();
+  var mousePx = G_NORMAL_MAP.getProjection().fromLatLngToPixel(mouseLatLng, zoom);
+  var tileKey = iNaturalist.Map.obsTilePointsURL(Math.floor(mousePx.x / 256), 
+    Math.floor(mousePx.y / 256), zoom);
+  
+  if (typeof(window.tilePoints[tileKey]) == 'undefined' || window.tilePoints[tileKey].length == 0) return;
+  var observations = window.tilePoints[tileKey];
+  
+  for (var i = observations.length - 1; i >= 0; i--) {
+    var obsPx = G_NORMAL_MAP.getProjection().fromLatLngToPixel(
+      new GLatLng(observations[i].latitude, observations[i].longitude), zoom);
+    var distance = Math.sqrt(
+      Math.pow((mousePx.x - obsPx.x), 2) +
+      Math.pow((mousePx.y - obsPx.y), 2)
+    );
+    
+    if (distance < 10) { // if within 10px...
+      this._allObsMarker.setLatLng(
+        new GLatLng(observations[i].latitude, observations[i].longitude));
+      this._allObsMarker._observation = observations[i];
+      this._allObsMarker.show();
+      return;
+    }
+    this._allObsMarker._observation = null;
+    this._allObsMarker.hide();
+  };
+}
 
 if (typeof iNaturalist === 'undefined') {
   this.iNaturalist = {};
@@ -293,30 +369,15 @@ if (typeof iNaturalist.Map === 'undefined') {
 // static functions
 iNaturalist.Map.createMap = function(options) {
   if (typeof(GBrowserIsCompatible) == 'function' && GBrowserIsCompatible()){
-    // Reverse compat w/ Prototype
-    if (typeof Prototype != 'undefined') {
-      options = $H({
-        div: 'map',
-        lat: 37.9,
-        lng: -122.4,
-        zoom: 10,
-        type: G_PHYSICAL_MAP,
-        controls: 'big'
-      }).merge(options).toObject();
-    } else {
-      options = $.extend(
-        {},
-        {
-          div: 'map',
-          lat: 0,
-          lng: 0,
-          zoom: 1,
-          type: G_PHYSICAL_MAP,
-          controls: 'big'
-        },
-        options
-      );
-    }
+    options = $.extend({}, {
+      div: 'map',
+      lat: 0,
+      lng: 0,
+      zoom: 1,
+      type: G_PHYSICAL_MAP,
+      controls: 'big',
+      observationsTileServer: 'http://localhost:8000'
+    }, options);
     
     var map;
     
@@ -344,6 +405,8 @@ iNaturalist.Map.createMap = function(options) {
     
     map.addMapType(G_PHYSICAL_MAP);
     map.setMapType(options['type']);
+    
+    map._observationsTileServer = options.observationsTileServer;
     
     return map;
   }
@@ -399,6 +462,36 @@ iNaturalist.Map.createObservationIcon = function(options) {
   observation.image = iconPath;
   return observation;
 };
+
+// Create a custom TileLayer class that will lookup observations json for 
+// each tile
+ObservationsTileLayer = function(copyrights, minResolution, maxResolution, options) {
+  if (typeof(options) != 'undefined' && typeof(options.tileUrlTemplate) != 'undefined') {
+    this.tileUrlTemplate = options.tileUrlTemplate;
+  }
+  return true;
+};
+ObservationsTileLayer.prototype = new GTileLayer();
+ObservationsTileLayer.prototype.getTileUrl = function(tilePoint, zoom) {
+  var jsonURL = iNaturalist.Map.obsTilePointsURL(tilePoint.x, tilePoint.y, zoom);
+  if (typeof(window.tilePoints) == 'undefined') window.tilePoints = {};
+  
+  // if we already have data for this tile, skip the AJAX
+  if (typeof(window.tilePoints[jsonURL]) == 'undefined') {
+    $.getJSON(jsonURL, function(data, textStatus) {
+      window.tilePoints[jsonURL] = data;
+    });
+  };
+  
+  // Return the actual tile URL
+  var tileUrl = this.tileUrlTemplate || 'http://localhost:8000/{Z}/{X}/{Y}.png';
+  tileUrl = tileUrl.replace('{Z}', zoom).replace('{X}', tilePoint.x).replace('{Y}', tilePoint.y);
+  return tileUrl;
+}
+
+iNaturalist.Map.obsTilePointsURL = function(x, y, zoom) {
+  return '/observations/tile_points/' + zoom + '/' + x + '/' + y + '.json';
+}
 
 // Static constants
 iNaturalist.Map.ICONS = {

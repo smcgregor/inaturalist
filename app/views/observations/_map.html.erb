@@ -1,11 +1,13 @@
 <% content_for(:extrajs) do %>
   <!-- Note: The parent view should include the GMaps libs! -->
   <%= javascript_include_tag 'inaturalist/map2', 
-                             'jquery/plugins/jquery.url.packed.js' %>
+                             'jquery/plugins/jquery.url.packed.js',
+                             'jquery/plugins/jqModal',
+                             'modal_image' %>
   <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
       // Setup the Map
-      var map = iNaturalist.Map.createMap();
+      var map = iNaturalist.Map.createMap({observationsTileServer: '<%= OBSERVATIONS_TILE_SERVER %>'});
       window.map = map;
       
       // Add some fancy-pants controls
@@ -53,11 +55,11 @@
         $(this).toggleClass('closed');
         $('#mapobservations').toggle();
         if ($(this).hasClass('closed')) {
-          $('#map').css({
+          $('#map, .map').css({
             width: '940px'
           });
         } else {
-          $('#map').css({
+          $('#map, .map').css({
             width: '640px'
           });
         };
@@ -73,13 +75,8 @@
       $('#mapobservations').addClass('mini');
       $('#mapdivider').show();
       $('#mapcontrols').show();
-      if ($('#mapdivider').hasClass('closed')) {
-        $('#mapobservations').hide();
-      };
-      if (window.map) {
-        window.map.checkResize();
-        window.map.zoomToObservations();
-      }
+      if ($('#mapdivider').hasClass('closed')) $('#mapobservations').hide();
+      if (window.map) window.map.checkResize();
       alterLinkParams({view: 'map'});
       $('#view_input').val('map');
     }
@@ -141,6 +138,7 @@
       $('#filters input[name=nelng]').val(bounds.getNorthEast().lng());
       $('#submit_filters_button').click();
     }
+    
   </script>
 <% end %>
 <% content_for(:extracss) do %>
@@ -148,7 +146,6 @@
     .observations.map {
       float: left;
       width: 640px;
-      height: 500px;
     }
     
     #map {
@@ -186,13 +183,17 @@
     #mapobservations.mini {
       float: left;
       width: 300px;
-      height: 500px;
+      height: 520px;
       overflow: auto;
     }
     
     #redo_search_in_map_area_button {
       background: 0% 50% url(/images/silk/arrow_refresh.png) no-repeat;
       padding-left: 20px;
+    }
+    
+    #redo_search_in_map_area_loading.loading {
+      display: inline;
     }
   </style>
 <% end %>
@@ -204,6 +205,13 @@
   <div id="mapcontrols"<% unless @view && @view == 'map' %> style="display: none"<% end %>>
     <%= link_to_function "Redo search in map area", "redoSearchInMapArea()", :id => 'redo_search_in_map_area_button' %>
     <span id="redo_search_in_map_area_loading" class="loading status" style="display: none">Loading...</span>
+    | <%= link_to_function "Show all observations", 
+      "map.showAllObsOverlay(); $(this).hide(); $('#hide_all_obs_button').show()", 
+      :id => 'show_all_obs_button' %>
+    <%= link_to_function "Hide all observations", 
+      "map.hideAllObsOverlay(); $(this).hide(); $('#show_all_obs_button').show()", 
+      :id => 'hide_all_obs_button', :style => 'display: none' %>
+    <span class="description">(experimental)</span>
   </div>
 </div>
 <div id="mapdivider"<% unless @view && @view == 'map' %> style="display: none"<% end %>>
