@@ -1,20 +1,20 @@
 development: &non_production_settings
   site_url: http://localhost:3000
-  site_name: iNaturalist.org
-  admin_email: admin@inaturalist.org
-  noreply_email: no-reply@inaturalist.org
+  site_name: atlasoflife.org
+  admin_email: smcgregor08@gmail.com
+  noreply_email: no-reply@atlasoflife.org
   
 test:
   <<: *non_production_settings
 
 staging:
-  site_url: http://staging.inaturalist.org
-  site_name: iNaturalist.org
-  admin_email: admin@inaturalist.org
-  noreply_email: no-reply@inaturalist.org
+  site_url: http://staging.atlasoflife.org
+  site_name: atlasoflife.org
+  admin_email: smcgregor08@gmail.com
+  noreply_email: no-reply@atlasoflife.org
   
 production:
-  site_url: http://www.inaturalist.org
-  site_name: iNaturalist.org
-  admin_email: admin@inaturalist.org
-  noreply_email: no-reply@inaturalist.org
+  site_url: http://www.atlasoflife.org
+  site_name: atlasoflife.org
+  admin_email: smcgregor08@gmail.com
+  noreply_email: no-reply@atlasoflife.org

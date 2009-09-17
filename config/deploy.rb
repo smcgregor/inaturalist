@@ -1,17 +1,17 @@
 default_run_options[:pty] = true
 
-set :application, "inaturalist"
-set :domain,      "inaturalist.org"
+set :application, "atlasoflife"
+set :domain,      "atlasoflife.org"
 default_run_options[:pty] = true
-set :repository,  "git@github.com:inaturalist/inaturalist.git"
+set :repository,  "git@github.com:smcgregor/inaturalist.git"
 set :scm, "git"
-set :user, "inaturalist"
-set :branch, "master"
+set :user, "smcgregor"
+set :branch, "dataset"
 set :deploy_via, :remote_cache
 
 # Don't use sudo, execute all commands as inaturalist
 set :use_sudo, false
-set :user, "inaturalist"
+set :user, "smcgregor"
 
 # If you aren't deploying to /u/apps/#{application} on the target
 # servers (which is the default), you can specify the actual location
@@ -30,7 +30,7 @@ else
   set :port_num, 9000  
 end
 
-set :inat_config_shared_path, "#{deploy_to}/.."
+set :inat_config_shared_path, "#{deploy_to}shared"
 
 set :num_listeners, 1
 
