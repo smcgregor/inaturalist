@@ -469,7 +469,7 @@ class ObservationsController < ApplicationController
       @observations = []
       @hasInvalid = false
       csv = params[:upload][:datafile].to_tempfile
-      max_rows = 100
+      max_rows = 5000
       row_num = 0
       
       begin
