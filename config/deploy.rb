@@ -11,7 +11,7 @@ set :deploy_via, :remote_cache
 
 # Don't use sudo, execute all commands as inaturalist
 set :use_sudo, false
-set :user, "smcgregor"
+set :user, "smcgregor08"
 
 # If you aren't deploying to /u/apps/#{application} on the target
 # servers (which is the default), you can specify the actual location
